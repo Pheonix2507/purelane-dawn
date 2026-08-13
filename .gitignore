@@ -10,3 +10,12 @@ Thumbs.db
 .shopify
 node_modules
 *.zip
+
+# env
+.env*
+!.env.example
+
+# local AI tooling config - never publish
+.claude/
+.cursor/
+CLAUDE.md
