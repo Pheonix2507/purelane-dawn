@@ -1,0 +1,376 @@
+/* Foundation shared by every Purelane section: tokens, type, glass, buttons,
+   reveal. Resolved from the prototype's two style blocks, where the second
+   ("VERSION 2 - BRAND COLOURS") overrides the first. */
+
+:root {
+  --pl-ink: #f4f0fb;
+  --pl-deep: #e2daf3;
+  --pl-brand: #4b3a8f;
+  --pl-brand-lt: #6b55b8;
+  --pl-paper: #241a3d;
+  --pl-paper-2: rgba(36, 26, 61, 0.78);
+
+  /* Prototype had .56, which is 3.73:1 on --pl-ink and fails AA for the
+     11-12px text this is used on. .64 is the lowest value that reaches 4.5:1. */
+  --pl-paper-3: rgba(36, 26, 61, 0.64);
+  --pl-surface: #17102b;
+
+  --pl-accent: #b8701c;
+  --pl-accent-2: #c9761d;
+
+  /* --pl-accent is 3.48:1: fine for display type and UI dots at the 3:1 bar,
+     short of 4.5:1 for the 9-16px text that also uses it. */
+  --pl-accent-ink: #9e6018;
+  --pl-leaf: #4f7d10;
+  --pl-star: #587016;
+
+  --pl-teal: #00706a;
+  --pl-teal-dk: #004b46;
+  --pl-teal-ink: #01423b;
+  --pl-on-teal: #f4fdf6;
+
+  --pl-g-bg: linear-gradient(158deg, rgba(255, 255, 255, 0.8), rgba(236, 230, 247, 0.56) 58%, rgba(222, 212, 240, 0.5));
+  --pl-g-line: rgba(75, 58, 143, 0.16);
+  --pl-g-shadow: 0 22px 54px rgba(58, 44, 112, 0.13);
+  --pl-g-inset: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+
+  --pl-font-display: 'Outfit', system-ui, sans-serif;
+  --pl-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --pl-r: 26px;
+  --pl-r-sm: 16px;
+  --pl-maxw: 1180px;
+  --pl-sec-y: 34px;
+  --pl-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (max-width: 760px) {
+  :root {
+    --pl-sec-y: 22px;
+  }
+}
+
+/* The prototype relied on a global `* { margin: 0; padding: 0 }`, which a theme
+   cannot have. Scoped to our sections and held at zero specificity so component
+   rules below win without escalation. */
+.pl-section :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, dl, dd) {
+  margin: 0;
+  padding: 0;
+}
+
+.pl-section :where(ul, ol) {
+  list-style: none;
+}
+
+.pl-section :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pl-section :where(img, svg) {
+  display: block;
+  max-width: 100%;
+}
+
+.pl-section {
+  position: relative;
+  z-index: 2;
+  padding: var(--pl-sec-y) 0;
+  font-family: var(--pl-font-body);
+  color: var(--pl-paper);
+  line-height: 1.62;
+}
+
+.pl-section :focus-visible {
+  outline: 2px solid var(--pl-leaf);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.pl-wrap {
+  max-width: var(--pl-maxw);
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+/* type */
+
+.pl-d1,
+.pl-d2,
+.pl-d3 {
+  font-family: var(--pl-font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.018em;
+  font-weight: 800;
+  line-height: 0.87;
+  color: var(--pl-surface);
+}
+
+.pl-d1 {
+  font-size: clamp(48px, 8.6vw, 112px);
+}
+
+.pl-d2 {
+  font-size: clamp(30px, 4.6vw, 54px);
+  line-height: 0.94;
+}
+
+.pl-d3 {
+  font-size: clamp(21px, 2.5vw, 30px);
+  line-height: 1.04;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 760px) {
+  .pl-d1 {
+    font-size: clamp(44px, 13.5vw, 64px);
+  }
+}
+
+.pl-hl {
+  color: var(--pl-accent);
+}
+
+.pl-lede {
+  font-size: clamp(15px, 1.35vw, 17.5px);
+  color: var(--pl-paper-2);
+  max-width: 44ch;
+}
+
+.pl-body-s {
+  font-size: 14.5px;
+  color: var(--pl-paper-2);
+  line-height: 1.66;
+}
+
+.pl-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--pl-paper-3);
+}
+
+/* glass */
+
+.pl-glass {
+  background: var(--pl-g-bg);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid var(--pl-g-line);
+  border-radius: var(--pl-r);
+  box-shadow: var(--pl-g-shadow), var(--pl-g-inset);
+  position: relative;
+  overflow: hidden;
+}
+
+.pl-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.55),
+    transparent 32%,
+    transparent 74%,
+    rgba(201, 118, 29, 0.06)
+  );
+}
+
+.pl-glass-2 {
+  background: linear-gradient(158deg, rgba(255, 255, 255, 0.66), rgba(236, 230, 247, 0.44));
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid rgba(75, 58, 143, 0.13);
+  border-radius: var(--pl-r);
+  box-shadow: 0 16px 38px rgba(58, 44, 112, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 760px) {
+  .pl-glass {
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+  }
+
+  .pl-glass-2 {
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+  }
+}
+
+.pl-sec-pad {
+  padding: clamp(26px, 3.4vw, 40px);
+}
+
+@media (max-width: 760px) {
+  .pl-sec-pad {
+    padding: 22px 18px;
+  }
+}
+
+/* buttons */
+
+.pl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  appearance: none;
+  transition: 0.35s var(--pl-ease);
+  white-space: nowrap;
+}
+
+.pl-btn svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+}
+
+.pl-btn--primary {
+  background: linear-gradient(135deg, var(--pl-teal), var(--pl-teal-dk));
+  color: var(--pl-on-teal);
+  box-shadow: 0 12px 26px rgba(0, 80, 74, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.pl-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(0, 80, 74, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.pl-btn--ghost {
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(75, 58, 143, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--pl-teal-ink);
+}
+
+.pl-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+}
+
+.pl-btn--sm {
+  height: 38px;
+  padding: 0 18px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+
+.pl-btn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+  box-shadow: none;
+}
+
+/* rules and panel heads */
+
+.pl-rule {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 0 0 20px;
+  max-width: 270px;
+}
+
+.pl-rule i {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, rgba(75, 58, 143, 0.34), transparent);
+}
+
+.pl-rule svg {
+  width: 16px;
+  height: 16px;
+  color: var(--pl-accent);
+  flex: 0 0 auto;
+}
+
+.pl-panel-head {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.pl-panel-head .pl-d2 {
+  margin-bottom: 12px;
+}
+
+.pl-panel-head .pl-rule {
+  margin: 0 auto;
+  justify-content: center;
+  max-width: 240px;
+}
+
+.pl-panel-head .pl-rule i:first-child {
+  background: linear-gradient(90deg, transparent, rgba(75, 58, 143, 0.34));
+}
+
+/* reveal on scroll
+
+   Prototype hid every .rv at rest and relied on script to reveal it, so a
+   scripting failure left the page blank. Inverted: content is visible by
+   default and only hides once script has confirmed it can reveal it again. */
+
+.pl-reveal-ready .pl-rv {
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(7px);
+  transition: opacity 0.95s var(--pl-ease), transform 0.95s var(--pl-ease), filter 0.95s var(--pl-ease);
+}
+
+.pl-reveal-ready .pl-rv.is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.pl-rv--d1 {
+  transition-delay: 0.09s;
+}
+
+.pl-rv--d2 {
+  transition-delay: 0.18s;
+}
+
+.pl-rv--d3 {
+  transition-delay: 0.27s;
+}
+
+.pl-rv--d4 {
+  transition-delay: 0.36s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Prototype used `* { animation-duration: .01ms }`, which fast-forwards a
+     marquee to its final keyframe instead of stopping it, parking the track at
+     translateX(-50%) with half its cards off screen. Cancelling the animation
+     leaves it at the start. */
+  .pl-reveal-ready .pl-rv,
+  .pl-reveal-ready .pl-rv.is-in {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  .pl-btn:hover {
+    transform: none;
+  }
+}
