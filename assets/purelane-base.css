@@ -325,20 +325,24 @@
 /* reveal on scroll
 
    Prototype hid every .rv at rest and relied on script to reveal it, so a
-   scripting failure left the page blank. Inverted: content is visible by
-   default and only hides once script has confirmed it can reveal it again. */
+   scripting failure left a blank page of correctly laid out invisible boxes.
+   The hiding is now gated on scripting being available. A browser that does not
+   understand the query evaluates it as false and never hides anything, so the
+   failure direction is content visible rather than content lost. */
 
-.pl-reveal-ready .pl-rv {
-  opacity: 0;
-  transform: translateY(30px);
-  filter: blur(7px);
-  transition: opacity 0.95s var(--pl-ease), transform 0.95s var(--pl-ease), filter 0.95s var(--pl-ease);
-}
+@media (scripting: enabled) {
+  .pl-rv {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(7px);
+    transition: opacity 0.95s var(--pl-ease), transform 0.95s var(--pl-ease), filter 0.95s var(--pl-ease);
+  }
 
-.pl-reveal-ready .pl-rv.is-in {
-  opacity: 1;
-  transform: none;
-  filter: none;
+  .pl-rv.is-in {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 
 .pl-rv--d1 {
@@ -362,8 +366,8 @@
      marquee to its final keyframe instead of stopping it, parking the track at
      translateX(-50%) with half its cards off screen. Cancelling the animation
      leaves it at the start. */
-  .pl-reveal-ready .pl-rv,
-  .pl-reveal-ready .pl-rv.is-in {
+  .pl-rv,
+  .pl-rv.is-in {
     opacity: 1;
     transform: none;
     filter: none;

@@ -119,9 +119,32 @@ with `numOctaves="3"` over a 1800x1100 viewport, composited with
 transform`.
 
 The displacement itself never animates. Only the containers move. So the filter
-output is a static image being recomputed for motion that does not depend on it.
-Pre-rendering each layer once and keeping the transform gives identical output
-without the per-frame filter cost. Detail lands with the background work.
+output is effectively a static image behind motion that does not depend on it,
+and the first instinct was to pre-render each layer and drop the filters.
+
+Measured before committing to that. Rendered the three filtered layers in
+headless Chrome, which is the same engine that will run the page, and compared
+transfer sizes against the markup they would replace:
+
+| | wl-a | wl-b | wl-s | total |
+|---|---|---|---|---|
+| WebP q72 at 1800x1100 | 124K | 120K | 32K | 276K |
+| WebP q72 at 900x550 | 60K | 52K | 12K | 124K |
+| WebP q72 at 600x367 | 36K | 36K | 4K | 76K |
+| WebP q72 at 450x275 | 24K | 24K | 4K | 52K |
+| the SVG they replace, gzipped | | | | **6K** |
+
+Pre-rendering costs between 9x and 46x the bytes. On a decorative background that
+is the wrong trade twice over, because those bytes compete for bandwidth with the
+hero product image, which is the LCP element.
+
+So the SVG stays and the cost moves instead of being paid in bandwidth. The water
+markup ships inside a `<template>`, whose content is inert and never enters the
+render tree, so the filters cost nothing during load. Script moves it into the
+document on an idle callback after `load`, and it fades in over the 1.2s
+transition the prototype already had on `.water`. The scene gradient itself is
+plain CSS and paints immediately, so the page looks right from the first frame
+and only gains the water detail a moment later.
 
 ### Product images are not images
 

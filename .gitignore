@@ -19,3 +19,6 @@ node_modules
 .claude/
 .cursor/
 CLAUDE.md
+
+# local deliverables scratch - store credentials, never committed
+*.local.md
