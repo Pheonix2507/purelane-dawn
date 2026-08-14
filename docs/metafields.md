@@ -20,13 +20,20 @@ collections, product type, vendor, tags.
 
 | Namespace and key | Type | Why |
 |---|---|---|
-| `reviews.rating` | `rating` | Shopify's standard rating key, the one Judge.me, Loox and Shopify's own review apps write to. |
-| `reviews.rating_count` | `number_integer` | Same. |
+| `reviews.rating` | `rating` | Shopify's standard rating key, the one Judge.me, Loox and Shopify's own review apps write to. Needs explicit `scale_min` and `scale_max` validations or the definition is rejected. |
+| `reviews.rating_count` | `number_integer` | Same, but **values only, no definition**. |
 
 Using the standard namespace rather than inventing `purelane.rating` means a real
 review app can be installed later and the product cards start showing genuine
 ratings with no template change. Seeded by hand here because the store has no
 review app.
+
+`reviews.rating_count` refuses a definition: that namespace and key are held for
+a standard definition, and this store has no template to enable. The values are
+set on each product regardless, and Liquid reads a metafield whether or not a
+definition exists, so the cards render correctly. The only thing missing is an
+editing field in admin, which is the right trade for keeping the key a review app
+will recognise.
 
 ## Product metafields, namespace `purelane`
 
@@ -40,6 +47,13 @@ review app.
 sentence is reused wherever that product appears. Where a combo needs to say
 something different about a component, `bundle_item_notes` below overrides it.
 
+That override started as a list running parallel to `bundle_items`, which was
+wrong twice. The API rejects blank entries, so "override only the second one"
+could not be expressed, and reordering the contents would silently shift every
+note onto the wrong product. Keying by handle fixes both:
+`{"toilet-cleaner": "Kills 99.9% germs"}` says exactly what it means and survives
+a reorder.
+
 ## Bundle and combo products, namespace `purelane`
 
 Bundles and combos are products, not metaobjects, because they have a price and a
@@ -49,7 +63,7 @@ than a number typed into Liquid.
 | Key | Type | Renders as |
 |---|---|---|
 | `bundle_items` | `list.product_reference` | the products in the box, and by its length the "3 products" count |
-| `bundle_item_notes` | `list.single_line_text_field` | positional override of each component's `benefit_line` |
+| `bundle_item_notes` | `json` | per-box override of a component's `benefit_line`, keyed by product handle |
 | `includes_text` | `multi_line_text_field` | the "Includes: ..." paragraph |
 | `flag` | `single_line_text_field` | the corner ribbon: "Most popular", "Best value" |
 | `tier_features` | `list.single_line_text_field` | the ticked list on a bundle tier |

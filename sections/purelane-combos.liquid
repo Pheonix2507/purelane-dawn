@@ -77,7 +77,8 @@
                 <div class="pl-stack">
                   {%- for item in items limit: s.stack_max -%}
                     {%- liquid
-                      assign note = notes[forloop.index0]
+                      # keyed by handle, so reordering contents cannot misalign notes
+                      assign note = notes[item.handle]
                       if note == blank
                         assign note = item.metafields.purelane.benefit_line.value
                       endif
