@@ -294,3 +294,80 @@ glyph, and Google will serve it if asked for directly, but no default subset
 declares it. Without a third face per family, every price on the page would draw
 its rupee sign in a fallback font next to Inter digits. That is a one-kilobyte
 file and an easy thing to never notice.
+
+## Scope: what is built and what I cut
+
+**Built:** the five sections in the brief, plus the fixed scene background. The
+background is not bonus work: all five are translucent panels sitting on it, so
+none of them can be pixel-accurate without it.
+
+**Cut:** everything else in the prototype. Ingredients, the three how-it-works
+pillars, the proof block and its product rotator, the full-range shelf, why
+bundles beat buying single, bundle categories, the trust bar, the signup form, the
+header and its navigation, the announcement ticker, the scroll progress rail, the
+sticky mobile CTA and the footer.
+
+## Known gaps in what is built
+
+Straight about these rather than hoping they go unnoticed.
+
+**No per-breakpoint visual diff.** The biggest one. I had no browser automation in
+this environment, so I verified structure and data by fetching the rendered
+storefront and asserting on the DOM, and verified layout by isolating the CSS and
+measuring computed values directly. That catches a lot, and it caught the
+unpublished collections and the wrong hero artwork. It does not replace a stored
+reference render per breakpoint with a diff. Layout at 375, 768 and 1180 is the
+main untested surface.
+
+**The chrome around the sections is Dawn's.** The prototype has its own fixed
+header, announcement ticker and progress rail, and those set the vertical rhythm
+above the hero. Until they exist, the hero's top padding is a setting rather than
+a match to the original.
+
+**Add to cart is a form post, not a fetch.** Correct, accessible and works with
+scripting off, but a merchant expects Dawn's cart drawer to slide out. Wiring the
+card to Dawn's own `product-form` element is the upgrade.
+
+**Bundle mechanics are presentational.** The tiers say "pick any three products"
+but each sells one fixed product. Making that real needs Shopify Bundles or a cart
+transform so the customer genuinely chooses, which is a different piece of work
+from rendering the card.
+
+**Reviews are seeded metaobjects.** A real store installs a review app. The
+definitions use Shopify's standard `reviews.rating` key precisely so that swap
+needs no template change, and the aggregate figures in the rail heading should
+move to the app's shop-level metafield when it happens.
+
+**`reviews.rating_count` has no definition,** because that namespace and key are
+held for a standard definition this store has no template for. Values are set and
+Liquid reads them, but there is no field for it in admin.
+
+**The per-product price is derived,** so the two-pack reads ₹175 where the
+prototype shows ₹174. The prototype's own three figures are not internally
+consistent: two are floored and one is rounded.
+
+**Container width is hardcoded at 1180px** rather than reading Dawn's page width
+setting, because the brief asks for a match at every width. Worth revisiting if
+the merchant ever wants the whole storefront to agree.
+
+**The combo rail has no arrow controls.** It is a focusable region and scrolls
+with the arrow keys, which meets the keyboard requirement, but a desktop user
+expects buttons.
+
+**Currency formatting lives in the store, not the repo.** Anyone cloning this
+needs `₹{{amount_no_decimals_with_comma_separator}}` in Settings, Store details,
+Currency formatting, or every price renders as `Rs. 200.00`.
+
+## What I would do next, in order
+
+1. A reference render per breakpoint with a diff threshold, run on every deploy.
+   Everything else on this list is guesswork without it.
+2. The header, ticker and progress rail, because they are what make the hero's
+   vertical rhythm match the original rather than approximate it.
+3. Dawn's cart drawer behind the add to cart buttons.
+4. Real bundle mechanics, so "pick any three" is a choice rather than a label.
+5. The eight remaining sections, cheapest first: the trust bar, why bundles and
+   bundle categories all reuse the card and figure snippets that already exist.
+6. Core Web Vitals measured on a throttled mid-range device rather than inferred
+   from transfer sizes. I could measure bytes here; I could not measure what a
+   real phone does with them.
