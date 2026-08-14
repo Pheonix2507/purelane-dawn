@@ -126,7 +126,8 @@
                     sizes: '(min-width: 900px) min(50vw, 560px), 88vw',
                     widths: '200,300,400,560,760,1000',
                     loading: img_loading,
-                    fetchpriority: img_priority
+                    fetchpriority: img_priority,
+                    prefer_hero: true
                   %}
                 {%- endfor -%}
               {%- else -%}
@@ -137,7 +138,8 @@
                   sizes: '(min-width: 900px) min(50vw, 560px), 88vw',
                   widths: '200,300,400,560,760,1000',
                   loading: 'eager',
-                  fetchpriority: 'high'
+                  fetchpriority: 'high',
+                  prefer_hero: true
                 %}
               {%- endif -%}
 

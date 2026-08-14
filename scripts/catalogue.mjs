@@ -5,6 +5,8 @@ export const SINGLES = [
     handle: 'tap-cleaner',
     title: 'Tap Cleaner & Limescale Remover',
     art: 'p-tap',
+    // the prototype's hero stage uses a taller, narrower bottle than its cards
+    heroArt: 'p-tbtl',
     price: 200,
     compare: 299,
     badge: 'Best seller',
@@ -18,6 +20,7 @@ export const SINGLES = [
     handle: 'kitchen-cleaner',
     title: 'Kitchen Cleaner, Foaming',
     art: 'p-kitchen',
+    heroArt: 'p-kbtl',
     price: 200,
     compare: 299,
     badge: 'Best seller',
@@ -31,6 +34,7 @@ export const SINGLES = [
     handle: 'metal-cleaner',
     title: 'Copper, Bronze & Brass Cleaner',
     art: 'p-metal',
+    heroArt: 'p-mbtl',
     price: 200,
     compare: 299,
     badge: 'Top rated',
@@ -162,8 +166,9 @@ export const BOXES = [
     art: null,
     price: 499,
     compare: 897,
-    items: ['kitchen-cleaner', 'tap-cleaner', 'dishwash-gel'],
-    features: ['Pick any three products', 'Covers kitchen and laundry', 'Free shipping across India'],
+    // ordered to match the prototype's three-bottle hero slide
+    items: ['tap-cleaner', 'metal-cleaner', 'kitchen-cleaner'],
+    features: ['Pick any three products', 'Covers kitchen and bathroom', 'Free shipping across India'],
     body: 'Three full-size products of your choice at one flat price.',
   },
   {

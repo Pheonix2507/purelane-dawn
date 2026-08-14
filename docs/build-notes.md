@@ -188,6 +188,33 @@ Its neighbour `.hero-prod .pimg` in the same block targets nothing at all, since
 the hero stage uses `.hp`, which supports the reading that this area was edited
 in a hurry.
 
+### The hero stage and the cards draw the same products differently
+
+Easy to miss, and it wrecks the hero if you do. The prototype ships fourteen
+illustrations, and three products appear twice in two different shapes:
+
+| Product | Card art | Hero art |
+|---|---|---|
+| Kitchen cleaner | `p-kitchen`, aspect 0.639 | `p-kbtl`, aspect 0.323 |
+| Tap cleaner | `p-tap`, aspect 0.639 | `p-tbtl`, aspect 0.322 |
+| Copper and brass | `p-metal`, aspect 0.699 | `p-mbtl`, aspect 0.342 |
+
+The hero bottles are half the width at the same height. Since the stage is height
+driven, seeding only the card art made each hero bottle 434px wide instead of
+220px at a 680px stage, and three of those overrun a 560px stage and sprawl
+across the headline.
+
+Same product, different artwork, so on Shopify it is a second image rather than a
+second product: a `purelane.hero_image` file reference that the figure snippet
+prefers when the hero asks for it, falling back to the featured image. Kept in
+Files rather than as the product's second media, because media order is
+something a merchant will reasonably reorder in admin and that should not
+silently change what the hero draws.
+
+Caught by reading image dimensions out of the rendered page rather than by
+looking at it, which is worth recording: the artwork looked plausible in
+isolation and only the arithmetic gave it away.
+
 ### Smaller things
 
 - `.striphint` ("Swipe to see the full shelf") only has a rule inside the

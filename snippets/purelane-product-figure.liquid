@@ -8,10 +8,22 @@
   Height is set by the context that renders this (.pl-card__shot, .pl-stack, and
   so on), matching how the prototype sized them.
 
-  Accepts: product, class, sizes, loading, fetchpriority, widths
+  Accepts: product, class, sizes, loading, fetchpriority, widths, prefer_hero
+
+  prefer_hero swaps in the taller, narrower bottle the prototype's hero stage
+  uses. Same product, different artwork: at a 680px stage the card art is 434px
+  wide against the hero art's 220px, so three of them overrun the stage.
 {%- endcomment -%}
 {%- liquid
   assign media = product.featured_media
+
+  if prefer_hero
+    assign hero = product.metafields.purelane.hero_image.value
+    if hero
+      assign media = hero.image | default: hero
+    endif
+  endif
+
   assign img_loading = loading | default: 'lazy'
   assign img_widths = widths | default: '120,180,240,320,480,640'
   assign img_sizes = sizes | default: '160px'

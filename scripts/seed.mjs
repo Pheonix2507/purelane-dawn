@@ -85,6 +85,10 @@ const PRODUCT_DEFS = [
   ['save_label', 'Saving label override', 'single_line_text_field'],
   ['tier_features', 'Tier features', 'list.single_line_text_field'],
   ['is_hero', 'Highlight this box', 'boolean'],
+  /* The prototype draws the hero stage with taller, narrower bottles than its
+     cards use: 0.32 aspect against 0.64. Same product, different artwork, so it
+     is a second image on the product rather than a second product. */
+  ['hero_image', 'Hero stage image', 'file_reference'],
 ];
 
 const M_DEF_CREATE = `
@@ -204,6 +208,39 @@ async function uploadArt(name) {
   return target.resourceUrl;
 }
 
+/* Hero artwork lives in Files rather than on the product's media, so reordering
+   product images in admin cannot change what the hero shows. */
+const heroFiles = new Map();
+
+async function heroFileId(name) {
+  if (heroFiles.has(name)) return heroFiles.get(name);
+  const filename = `${name}.png`;
+
+  const found = await gql(
+    `query ($q: String!) { files(first: 1, query: $q) { nodes { ... on MediaImage { id } } } }`,
+    { q: `filename:${filename}` }
+  );
+  let id = found.files.nodes[0]?.id;
+
+  if (!id) {
+    const source = await uploadArt(name);
+    const d = await gql(
+      `mutation ($files: [FileCreateInput!]!) {
+        fileCreate(files: $files) {
+          files { ... on MediaImage { id } }
+          userErrors { message field }
+        }
+      }`,
+      { files: [{ originalSource: source, contentType: 'IMAGE', filename, alt: name }] }
+    );
+    userErrors(d.fileCreate);
+    id = d.fileCreate.files[0].id;
+  }
+
+  heroFiles.set(name, id);
+  return id;
+}
+
 /* ------------------------------------------------------------------ *
  * 4. products
  * ------------------------------------------------------------------ */
@@ -241,6 +278,7 @@ async function existingProducts() {
 async function upsertProduct(item, existing) {
   const prior = existing.get(item.handle);
   const hasMedia = (prior?.mediaCount?.count ?? 0) > 0;
+  const heroId = item.heroArt ? await heroFileId(item.heroArt) : null;
 
   const metafields = [
     item.benefit && { namespace: 'purelane', key: 'benefit_line', type: 'single_line_text_field', value: item.benefit },
@@ -266,6 +304,7 @@ async function upsertProduct(item, existing) {
       value: JSON.stringify(item.features),
     },
     item.hero && { namespace: 'purelane', key: 'is_hero', type: 'boolean', value: 'true' },
+    heroId && { namespace: 'purelane', key: 'hero_image', type: 'file_reference', value: heroId },
     item.notes && {
       namespace: 'purelane',
       key: 'bundle_item_notes',
