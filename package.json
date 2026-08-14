@@ -15,7 +15,7 @@
     "format:check": "prettier --check \"**/*.{liquid,css,js,json,md}\""
   },
   "devDependencies": {
-    "@shopify/cli": "^3.87.2",
+    "@shopify/cli": "^4.6.1",
     "prettier": "^3.4.2",
     "@shopify/prettier-plugin-liquid": "^1.9.3"
   }
