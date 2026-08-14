@@ -438,6 +438,7 @@ for (const [i, r] of REVIEWS.entries()) {
 }
 
 log('collections');
+const collectionIds = [];
 for (const c of COLLECTIONS) {
   const found = await gql(`query ($q: String!) { collections(first: 1, query: $q) { nodes { id } } }`, {
     q: `handle:${c.handle}`,
@@ -460,6 +461,7 @@ for (const c of COLLECTIONS) {
     { id, productIds: c.products.map((h) => byHandle.get(h).id) }
   );
   userErrors(d.collectionAddProducts);
+  collectionIds.push(id);
   log(`  ${c.handle}: ${c.products.length} products`);
 }
 
@@ -469,7 +471,11 @@ const online = pubs.publications.nodes.find((p) => /online store/i.test(p.name))
 if (!online) {
   log('  no Online Store publication found, skipping');
 } else {
-  const ids = [...byHandle.values()].map((p) => p.id);
+  /* Collections need publishing too, not just products. An unpublished
+     collection is invisible to the storefront, so collection.products came back
+     empty and both the shop grid and the combos rail rendered their onboarding
+     state against a fully stocked store. */
+  const ids = [...[...byHandle.values()].map((p) => p.id), ...collectionIds];
   for (const id of ids) {
     const d = await gql(
       `mutation ($id: ID!, $input: [PublicationInput!]!) {
@@ -479,7 +485,7 @@ if (!online) {
     );
     userErrors(d.publishablePublish);
   }
-  log(`  ${ids.length} products published`);
+  log(`  ${ids.length} resources published (products and collections)`);
 }
 
 log(`\nDone. ${SINGLES.length} products, ${BOXES.length} boxes, ${REVIEWS.length} reviews.\n`);
