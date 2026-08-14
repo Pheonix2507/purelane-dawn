@@ -1,0 +1,40 @@
+{%- comment -%}
+  A product's illustration, or the dashed placeholder tile when it has none.
+
+  The prototype drew these as CSS background-image on empty spans, which meant no
+  srcset, no loading control and nothing for image search. These are real images
+  off the product, so the grid renders store data.
+
+  Height is set by the context that renders this (.pl-card__shot, .pl-stack, and
+  so on), matching how the prototype sized them.
+
+  Accepts: product, sizes, loading, fetchpriority, widths
+{%- endcomment -%}
+{%- liquid
+  assign media = product.featured_media
+  assign img_loading = loading | default: 'lazy'
+  assign img_widths = widths | default: '120,180,240,320,480,640'
+  assign img_sizes = sizes | default: '160px'
+-%}
+{%- if media -%}
+  {{
+    media
+    | image_url: width: 640
+    | image_tag:
+      class: 'pl-pimg',
+      loading: img_loading,
+      fetchpriority: fetchpriority,
+      widths: img_widths,
+      sizes: img_sizes,
+      alt: media.alt | default: product.title | escape
+  }}
+{%- else -%}
+  {%- comment -%}
+    Not an error state. The prototype already draws this tile for the fabric
+    conditioner in the laundry combo, which has no illustration, so a product
+    without media falls back to the design's own answer for it.
+  {%- endcomment -%}
+  <span class="pl-tile" role="img" aria-label="{{ product.title | escape }}">
+    {% render 'purelane-icon', icon: 'leaf' %}
+  </span>
+{%- endif -%}

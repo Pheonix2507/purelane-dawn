@@ -1,0 +1,92 @@
+{%- comment -%}
+  Shop grid card. Shared with any section that renders a product in this shape.
+
+  Accepts: product, index, show_rating, button_label, heading_tag, sizes, loading
+{%- endcomment -%}
+{%- liquid
+  assign tag = heading_tag | default: 'h3'
+  assign variant = product.selected_or_first_available_variant
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value | plus: 0
+  assign badge = product.metafields.purelane.badge.value
+  assign delay = index | modulo: 4
+
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+    assign saved = product.compare_at_price | minus: product.price | times: 100.0
+    assign percent = saved | divided_by: product.compare_at_price | round
+  endif
+
+  assign one_variant = false
+  if product.has_only_default_variant or product.variants.size == 1
+    assign one_variant = true
+  endif
+-%}
+
+<article class="pl-glass pl-card pl-rv{% if delay > 0 %} pl-rv--d{{ delay }}{% endif %}">
+  <div class="pl-card__shot">
+    {%- if badge != blank -%}
+      <span class="pl-card__pill">{{ badge | escape }}</span>
+    {%- endif -%}
+    {% render 'purelane-product-figure', product: product, sizes: sizes, loading: loading %}
+  </div>
+
+  <{{ tag }} class="pl-card__title">
+    <a href="{{ product.url }}">{{ product.title | escape }}</a>
+  </{{ tag }}>
+
+  {%- if show_rating and rating != blank and rating_count > 0 -%}
+    <div class="pl-card__rate">
+      <span aria-hidden="true"><b>&#9733; {{ rating.rating }}</b> &middot; {{ rating_count }} reviews</span>
+      <span class="visually-hidden">
+        {{- 'Rated ' | append: rating.rating | append: ' out of ' | append: rating.scale_max | append: ', from ' | append: rating_count | append: ' reviews' -}}
+      </span>
+    </div>
+  {%- endif -%}
+
+  <div class="pl-card__price">
+    {%- if product.available == false -%}
+      <strong>{{ product.price | money }}</strong>
+      <span class="pl-card__soldout">{{ 'products.product.sold_out' | t }}</span>
+    {%- else -%}
+      <strong>{{ product.price | money }}</strong>
+      {%- if on_sale -%}
+        <s>
+          <span class="visually-hidden">Regular price</span>
+          {{ product.compare_at_price | money }}
+        </s>
+        <em>{{ percent }}% off</em>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+
+  {%- if product.available == false -%}
+    <button type="button" class="pl-btn pl-btn--ghost pl-btn--sm" disabled>{{ 'products.product.sold_out' | t }}</button>
+
+  {%- elsif one_variant -%}
+    {%- comment -%}
+      A plain form post rather than a fetch, so add to cart works before any
+      script has run. Shopify handles the redirect back to the cart.
+    {%- endcomment -%}
+    <form method="post" action="{{ routes.cart_add_url }}" class="pl-card__form">
+      <input type="hidden" name="form_type" value="product">
+      <input type="hidden" name="utf8" value="✓">
+      <input type="hidden" name="id" value="{{ variant.id }}">
+      <button type="submit" class="pl-btn pl-btn--ghost pl-btn--sm">
+        {{ button_label | default: 'Add to cart' }}
+        <span class="visually-hidden">, {{ product.title | escape }}</span>
+      </button>
+    </form>
+
+  {%- else -%}
+    {%- comment -%}
+      More than one variant means a choice has to be made, so this goes to the
+      product rather than silently adding whichever variant came first.
+    {%- endcomment -%}
+    <a href="{{ product.url }}" class="pl-btn pl-btn--ghost pl-btn--sm">
+      Choose options
+      <span class="visually-hidden">for {{ product.title | escape }}</span>
+    </a>
+  {%- endif -%}
+</article>

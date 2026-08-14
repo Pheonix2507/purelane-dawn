@@ -1,0 +1,144 @@
+.pl-shelf {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 860px) {
+  .pl-shelf {
+    grid-template-columns: repeat(var(--pl-shelf-cols, 4), 1fr);
+  }
+}
+
+.pl-card {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: 0.4s var(--pl-ease);
+}
+
+.pl-card:hover {
+  transform: translateY(-5px);
+}
+
+.pl-card__shot {
+  height: 150px;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.6), rgba(236, 230, 247, 0.42));
+  border: 1px solid rgba(75, 58, 143, 0.1);
+}
+
+.pl-card__shot .pl-pimg {
+  height: 122px;
+  filter: drop-shadow(0 8px 13px rgba(0, 74, 66, 0.13));
+}
+
+.pl-card__shot .pl-tile {
+  height: 122px;
+}
+
+.pl-card__pill {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(201, 118, 29, 0.34);
+  color: var(--pl-leaf);
+}
+
+.pl-card__title {
+  font-family: var(--pl-font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--pl-surface);
+  line-height: 1.2;
+  margin-bottom: 7px;
+  /* a seeded product carries a deliberately punishing title */
+  overflow-wrap: anywhere;
+}
+
+.pl-card__rate {
+  font-size: 11.5px;
+  color: var(--pl-paper-2);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pl-card__rate b {
+  color: var(--pl-accent-ink);
+  font-weight: 700;
+}
+
+/* margin-top: auto is what keeps the price and button on a common baseline when
+   one card's title runs to three lines and its neighbours run to one */
+.pl-card__price {
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pl-card__price strong {
+  font-family: var(--pl-font-display);
+  font-size: 18px;
+  color: var(--pl-surface);
+  font-weight: 700;
+}
+
+.pl-card__price s {
+  font-size: 12px;
+  color: var(--pl-paper-3);
+}
+
+.pl-card__price em {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--pl-accent-ink);
+}
+
+.pl-card__soldout {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pl-paper-3);
+}
+
+.pl-card__form {
+  display: contents;
+}
+
+.pl-card .pl-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 760px) {
+  .pl-card__shot {
+    height: 126px;
+  }
+
+  .pl-card__shot .pl-pimg,
+  .pl-card__shot .pl-tile {
+    height: 108px;
+  }
+}

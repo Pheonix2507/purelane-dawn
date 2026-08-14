@@ -280,6 +280,38 @@
   box-shadow: none;
 }
 
+/* product art, shared by every section that renders a product
+
+   Height is set by the context. The prototype derived width from an
+   aspect-ratio per illustration; a real image carries its own, so width: auto
+   does the same job for any product the merchant uploads. */
+
+.pl-pimg {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  flex: 0 0 auto;
+}
+
+.pl-tile {
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px dashed rgba(75, 58, 143, 0.26);
+  color: var(--pl-leaf);
+  flex: 0 0 auto;
+  aspect-ratio: 2 / 3;
+}
+
+.pl-tile svg {
+  width: 38%;
+  max-width: 28px;
+  height: auto;
+}
+
 /* rules and panel heads */
 
 .pl-rule {
