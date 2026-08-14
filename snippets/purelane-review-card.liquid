@@ -1,0 +1,29 @@
+{%- comment -%}
+  Accepts: review (a purelane_review metaobject), heading_tag
+{%- endcomment -%}
+{%- liquid
+  assign tag = heading_tag | default: 'h3'
+  assign product = review.product.value
+-%}
+<article class="pl-glass-2 pl-rcard">
+  {% render 'purelane-stars', rating: review.rating.value %}
+
+  {%- if review.title != blank -%}
+    <{{ tag }} class="pl-rcard__title">{{ review.title | escape }}</{{ tag }}>
+  {%- endif -%}
+
+  {%- if review.body != blank -%}
+    <p>{{ review.body | escape }}</p>
+  {%- endif -%}
+
+  <div class="pl-rcard__who">
+    {%- if review.verified -%}
+      {% render 'purelane-icon', icon: 'tick-bold' %}
+      <span class="visually-hidden">Verified buyer.</span>
+    {%- endif -%}
+    <b>{{ review.author | escape }}</b>
+    {%- if product -%}
+      <span>&middot; {{ product.title | escape }}</span>
+    {%- endif -%}
+  </div>
+</article>

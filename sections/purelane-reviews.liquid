@@ -1,0 +1,144 @@
+{{ 'purelane-base.css' | asset_url | stylesheet_tag }}
+{{ 'purelane-reviews.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+  assign reviews = s.reviews
+  if reviews == blank or reviews.size == 0
+    assign reviews = shop.metaobjects.purelane_review.values
+  endif
+-%}
+
+<div class="pl-section" id="{{ s.anchor | default: 'reviews' | handleize }}" data-pl-zone="{{ s.scene_depth }}">
+  {%- if s.kicker != blank or s.heading != blank or s.agg_1 != blank or s.agg_2 != blank -%}
+    <div class="pl-wrap">
+      <div class="pl-revhead pl-rv">
+        {%- if s.kicker != blank -%}
+          <span class="pl-kicker">{{ s.kicker | escape }}</span>
+        {%- endif -%}
+
+        {%- if s.heading != blank -%}
+          <h2 class="pl-revhead__agg">{{ s.heading | escape }}</h2>
+        {%- endif -%}
+
+        {%- if s.agg_1 != blank -%}
+          <span class="pl-revhead__agg">
+            {% render 'purelane-stars', rating: s.agg_rating %}
+            <b>{{ s.agg_rating }}</b>
+            {{ s.agg_1 | escape }}
+          </span>
+        {%- endif -%}
+
+        {%- if s.agg_2 != blank -%}
+          <span class="pl-revhead__agg">{{ s.agg_2 | escape }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- if reviews.size > 0 -%}
+    <div
+      class="pl-revrail pl-rv"
+      data-pl-rail
+      role="region"
+      aria-label="{{ s.rail_label | escape }}"
+      tabindex="0"
+    >
+      <div class="pl-revtrack" data-pl-track>
+        {%- for review in reviews -%}
+          {% render 'purelane-review-card', review: review %}
+        {%- endfor -%}
+
+        {%- comment -%}
+          The marquee translates the track by -50%, so it needs the list twice to
+          loop seamlessly. The prototype pasted the cards in again, which meant a
+          screen reader read every review twice. This copy is hidden from
+          assistive tech and from the tab order instead.
+        {%- endcomment -%}
+        <div class="pl-revtrack__loop" aria-hidden="true" inert>
+          {%- for review in reviews -%}
+            {% render 'purelane-review-card', review: review %}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="pl-revpause" data-pl-rail-pause aria-pressed="false">
+      {{ s.pause_label | escape }}
+    </button>
+  {%- elsif request.design_mode -%}
+    <div class="pl-wrap">
+      <p class="pl-body-s">
+        No reviews yet. Add entries to the Purelane review metaobject, or pick specific ones in this section's settings.
+      </p>
+    </div>
+  {%- endif -%}
+</div>
+
+<script src="{{ 'purelane-reveal.js' | asset_url }}" defer></script>
+<script src="{{ 'purelane-reviews.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Purelane reviews rail",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "metaobject_list",
+      "id": "reviews",
+      "label": "Reviews",
+      "metaobject_type": "purelane_review",
+      "info": "Leave empty to show every review entry."
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "That's what they said" },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Optional. The prototype has none, which leaves the section without a heading of its own."
+    },
+    {
+      "type": "range",
+      "id": "agg_rating",
+      "label": "Average rating",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "agg_1",
+      "label": "Rating caption",
+      "default": "from 8,000+ reviews",
+      "info": "A claim about the whole shop, so it is not derived from the entries below. Move it to a review app's shop metafield once one is installed."
+    },
+    { "type": "text", "id": "agg_2", "label": "Second caption", "default": "Loved by 12 lakh+ homes" },
+    {
+      "type": "header",
+      "content": "Rail"
+    },
+    { "type": "text", "id": "rail_label", "label": "Rail label", "default": "Customer reviews" },
+    { "type": "text", "id": "pause_label", "label": "Pause button label", "default": "Pause reviews" },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    { "type": "text", "id": "anchor", "label": "Anchor", "default": "reviews" },
+    {
+      "type": "range",
+      "id": "scene_depth",
+      "label": "Background depth",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 1
+    }
+  ],
+  "presets": [{ "name": "Purelane reviews rail" }]
+}
+{% endschema %}

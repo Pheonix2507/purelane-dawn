@@ -1,0 +1,16 @@
+{%- comment -%}
+  Accepts: rating, max
+
+  Glyphs are hidden from assistive tech and the value is given as text, so a
+  rating is never conveyed by shape and colour alone.
+{%- endcomment -%}
+{%- liquid
+  assign r = rating | plus: 0
+  assign m = max | default: 5 | plus: 0
+-%}
+<span class="pl-stars" aria-hidden="true">
+  {%- for i in (1..m) -%}
+    {%- if i <= r -%}&#9733;{%- else -%}&#9734;{%- endif -%}
+  {%- endfor -%}
+</span>
+<span class="visually-hidden">Rated {{ r }} out of {{ m }}</span>
