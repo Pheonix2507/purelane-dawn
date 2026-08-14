@@ -1,75 +1,129 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "background": {
+      "type": "purelane-scenes",
+      "settings": {}
+    },
+    "hero": {
+      "type": "purelane-hero",
       "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
-          }
+        "badge-1": {
+          "type": "badge",
+          "settings": { "icon": "leaf", "label": "Plant\npowered", "label_short": "Plant powered" }
         },
-        "button": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
+        "badge-2": {
+          "type": "badge",
+          "settings": { "icon": "shield", "label": "Safe for\nkids & pets", "label_short": "Kids & pet safe" }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": { "icon": "no-chem", "label": "Zero harsh\nchemicals", "label_short": "Zero harsh chem" }
+        },
+        "slide-1": {
+          "type": "slide",
+          "settings": { "product": "kitchen-cleaner", "label": "Single bottle", "discount_style": "percent" }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": { "product": "bundle-starter", "label": "Any 2 products", "discount_style": "amount" }
+        },
+        "slide-3": {
+          "type": "slide",
+          "settings": { "product": "bundle-popular", "label": "Any 3 products", "discount_style": "amount" }
         }
       },
-      "block_order": [
-        "heading",
-        "button"
-      ],
+      "block_order": ["badge-1", "badge-2", "badge-3", "slide-1", "slide-2", "slide-3"],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "heading": "Clean\nThat",
+        "accent_line": "Lasts",
+        "lede": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it.",
+        "show_rule": true,
+        "cta_1_label": "Shop now",
+        "cta_1_link": "#shop",
+        "cta_2_label": "How it works",
+        "cta_2_link": "#combos",
+        "badges_label": "Product promises",
+        "top_padding": 150,
+        "anchor": "top",
+        "scene_depth": 1
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "reviews": {
+      "type": "purelane-reviews",
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "kicker": "That's what they said",
+        "agg_rating": 5,
+        "agg_1": "from 8,000+ reviews",
+        "agg_2": "Loved by 12 lakh+ homes",
+        "rail_label": "Customer reviews",
+        "pause_label": "Pause reviews",
+        "anchor": "reviews",
+        "scene_depth": 1
+      }
+    },
+    "combos": {
+      "type": "purelane-combos",
+      "settings": {
+        "collection": "combos",
+        "count": 5,
+        "stack_max": 3,
+        "button_label": "Shop bundle",
+        "fine_print": "Inclusive of all taxes · COD available",
+        "kicker": "Pre-built to save you money",
+        "heading": "Best selling combos",
+        "show_rule": true,
+        "lede": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own.",
+        "rail_label": "Best selling combos",
+        "swipe_cue": "Swipe for more combos",
+        "rail_note": "Tapping \"Shop bundle\" opens the bundle picker with these products already added. You can still swap anything before you pay.",
+        "anchor": "combos",
+        "scene_depth": 3
+      }
+    },
+    "bundles": {
+      "type": "purelane-bundles",
+      "blocks": {
+        "tier-1": {
+          "type": "tier",
+          "settings": { "product": "bundle-starter", "tag": "Starter", "highlight": false, "link": "#shop" }
+        },
+        "tier-2": {
+          "type": "tier",
+          "settings": { "product": "bundle-popular", "tag": "Most popular", "highlight": true, "link": "#shop" }
+        },
+        "tier-3": {
+          "type": "tier",
+          "settings": { "product": "bundle-whole-home", "tag": "Whole home", "highlight": false, "link": "#shop" }
+        }
+      },
+      "block_order": ["tier-1", "tier-2", "tier-3"],
+      "settings": {
+        "kicker": "Build your bundle",
+        "heading": "One box. Every room.",
+        "lede": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way.",
+        "qty_label": "Products",
+        "unit_prefix": "Flat",
+        "unit_suffix": "per product",
+        "button_label": "Build this box",
+        "anchor": "bundles",
+        "scene_depth": 3
+      }
+    },
+    "shop": {
+      "type": "purelane-shop",
+      "settings": {
+        "collection": "bestsellers",
+        "count": 8,
+        "columns": 4,
+        "show_rating": true,
+        "button_label": "Add to cart",
+        "kicker": "Bestsellers",
+        "heading": "Loved by 30,000 homes",
+        "show_rule": true,
+        "anchor": "shop",
+        "scene_depth": 3
       }
     }
   },
-  "order": [
-    "image_banner",
-    "featured_collection"
-  ]
+  "order": ["background", "hero", "reviews", "combos", "bundles", "shop"]
 }
