@@ -96,8 +96,10 @@ without IntersectionObserver, but none for script that fails to run at all, so a
 blocked or errored bundle leaves a blank page of correctly laid out invisible
 boxes.
 
-Inverted: the reveal styles now sit behind a `.pl-reveal-ready` class that script
-puts on the root element. No script means no hiding.
+Inverted, and gated declaratively rather than by a class: the reveal styles sit
+inside `@media (scripting: enabled)`. A browser that does not understand the
+feature evaluates the query as false and never hides anything, so both "no
+script" and "no support for the query" fail towards content being visible.
 
 ### Reduced motion fast-forwards the marquees instead of stopping them
 

@@ -2,6 +2,9 @@
   "name": "purelane-dawn",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "description": "Purelane homepage sections on stock Dawn.",
   "scripts": {
     "dev": "shopify theme dev --store troopod-3yacwwmx.myshopify.com",

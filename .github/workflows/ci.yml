@@ -15,7 +15,20 @@ jobs:
     name: Theme Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: shopify/theme-check-action@v2
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
         with:
-          version: latest
+          node-version: 24
+          cache: npm
+
+      # shopify/theme-check-action@v2 bundles a Node 20 runtime and crashes on
+      # the Node 24 runners. Running the CLI this repo already pins means CI and
+      # local checks are the same tool at the same version.
+      - name: Install
+        run: npm ci
+
+      # --fail-level defaults to error, so Dawn's own warnings do not fail the
+      # build but a broken Liquid tag does.
+      - name: Theme Check
+        run: npm run check
