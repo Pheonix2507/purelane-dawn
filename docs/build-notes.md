@@ -268,10 +268,27 @@ with 18px gutters, and the brief asks for a match at every width, so this is
 hardcoded rather than inherited. Worth revisiting if the merchant ever wants the
 whole storefront to agree.
 
-## Still open
+## Fonts
 
-- Fonts. Outfit and Inter currently resolve by family name only. Both are SIL
-  Open Font License, so self-hosting the woff2 subsets in `assets/` and
-  preloading beats the prototype's render-blocking Google Fonts link.
-- Everything in the five-section scope. Nothing is built yet beyond this
-  foundation.
+The prototype loads Outfit and Inter from Google Fonts with a render-blocking
+stylesheet: an extra DNS lookup and TLS handshake to a third-party origin before
+any text can paint, then eight static weight files.
+
+Self-hosted instead, as two variable fonts on the same origin as the page, so the
+whole 400 to 800 range is one request per family. Both are SIL Open Font License.
+Six files ship, but `unicode-range` keeps them lazy: an English page pulls only
+the two latin subsets and the rupee face, about 82KB, and the latin-ext files sit
+unused unless a merchant types a character that needs them.
+
+Two things worth recording.
+
+Nothing loaded these fonts until this point. Dawn's font settings cannot supply
+either family, so every heading and every line of body copy was silently
+rendering in `system-ui` while the CSS asked for Outfit and Inter. It looked
+deliberate rather than broken, which is why it survived several passes.
+
+Google's own latin and latin-ext subsets omit U+20B9. Both families contain the
+glyph, and Google will serve it if asked for directly, but no default subset
+declares it. Without a third face per family, every price on the page would draw
+its rupee sign in a fallback font next to Inter digits. That is a one-kilobyte
+file and an easy thing to never notice.

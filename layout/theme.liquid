@@ -15,6 +15,13 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
+    {%- comment -%}
+      The Purelane sections need Outfit and Inter, which Dawn's font settings
+      cannot supply. In the head rather than in each section so the faces are
+      declared before first paint and the preload is not five requests deep.
+    {%- endcomment -%}
+    {% render 'purelane-fonts' %}
+
     <title>
       {{ page_title }}
       {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
