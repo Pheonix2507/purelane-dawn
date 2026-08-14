@@ -8,20 +8,21 @@
   Height is set by the context that renders this (.pl-card__shot, .pl-stack, and
   so on), matching how the prototype sized them.
 
-  Accepts: product, sizes, loading, fetchpriority, widths
+  Accepts: product, class, sizes, loading, fetchpriority, widths
 {%- endcomment -%}
 {%- liquid
   assign media = product.featured_media
   assign img_loading = loading | default: 'lazy'
   assign img_widths = widths | default: '120,180,240,320,480,640'
   assign img_sizes = sizes | default: '160px'
+  assign img_class = 'pl-pimg ' | append: class | strip
 -%}
 {%- if media -%}
   {{
     media
     | image_url: width: 640
     | image_tag:
-      class: 'pl-pimg',
+      class: img_class,
       loading: img_loading,
       fetchpriority: fetchpriority,
       widths: img_widths,
@@ -34,7 +35,7 @@
     conditioner in the laundry combo, which has no illustration, so a product
     without media falls back to the design's own answer for it.
   {%- endcomment -%}
-  <span class="pl-tile" role="img" aria-label="{{ product.title | escape }}">
+  <span class="pl-tile {{ class }}" role="img" aria-label="{{ product.title | escape }}">
     {% render 'purelane-icon', icon: 'leaf' %}
   </span>
 {%- endif -%}

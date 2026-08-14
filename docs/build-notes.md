@@ -167,6 +167,27 @@ inline the same bottle as an SVG element, around 30 lines each. Two techniques
 for one job, and the two do not render identically because `.card .shot svg` is
 122px tall against `.card .shot .pimg` at 108px on mobile.
 
+### The hero product keeps a shadow from the dark palette
+
+Flagged rather than fixed, because it changes what the page looks like.
+
+The light palette lightened every product shadow it touched: `.hp`,
+`.card .shot .pimg`, `.stack .it .pimg`, `.cat .ph .pimg`, `.tierpix .pimg`,
+`.rot .frame .pimg` and `.rangerow .pimg` all move to
+`drop-shadow(0 14px 22px rgba(0,74,66,.15))` or similar. It did not touch
+`.hero-prod`, which keeps `drop-shadow(0 34px 54px rgba(2,20,19,.6))` from the
+dark palette. Script then animates that same dark value between two keyframes on
+a loop.
+
+Seven siblings lightened and one missed reads like an oversight rather than a
+decision. But the brief says match the rendered output, and the rendered output
+has the dark shadow, so it is carried across as-is and noted here instead. It is
+a one-line change if you want it consistent.
+
+Its neighbour `.hero-prod .pimg` in the same block targets nothing at all, since
+the hero stage uses `.hp`, which supports the reading that this area was edited
+in a hurry.
+
 ### Smaller things
 
 - `.striphint` ("Swipe to see the full shelf") only has a rule inside the
